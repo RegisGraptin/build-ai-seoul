@@ -26,9 +26,9 @@ class Events:
 
         return text_only
 
-    def discover(self):
+    def discover(self, city):
         events = {}
-        links = self.extract_event_links("https://lu.ma/seoul")
+        links = self.extract_event_links(f"https://lu.ma/{city}")
         for link in links:
             event_link = f"https://lu.ma/{link}"
             events[event_link] = self.extract_event_content(event_link)
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     events = Events()
 
-    print(events.discover())
+    print(events.discover("seoul"))
     # response = requests.get("https://lu.ma/seoul")
     # response.raise_for_status()
     

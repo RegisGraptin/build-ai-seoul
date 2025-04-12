@@ -12,6 +12,8 @@ events = Events()
 # 1. Get user information and events info
 # 2. Adjust the selection based on the user preferences
 
+LUMA_CITIES = ["bangkok", "hongkong", "manila", "seoul", "tel-aviv", "tokyo", "singapore", "melbourne", "honolulu", "bengaluru", "dubai", "jakarta", "mumbai", "sydney", "taipei", "new-delhi", "kuala-lumpur", "ho-chi-minh-city"]
+
 def get_user_messages(chat_history):
     return [msg['content'] for msg in chat_history if msg.get('role') == 'user']
 
@@ -26,8 +28,22 @@ def agent(env: Environment, state: State):
     match Actions[state.action]:
         case Actions.FETCH_INFO:
             env.add_system_log("Discover new events")
+            user_input = get_user_messages(env.list_messages())[-1]
 
-            list_events = events.discover()
+            # Get user city
+            target_city = None
+            norm_user_input = user_input.lower()
+            for city in LUMA_CITIES:
+                if city in norm_user_input:
+                    target_city = city
+                    break
+            
+            if target_city is None:
+                env.add_reply("Please choose one city from the following list: \n" \
+                "bangkok, hongkong, manila, seoul, tel-aviv, tokyo, singapore, melbourne, honolulu, bengaluru, dubai, jakarta, mumbai, sydney, taipei, new-delhi, kuala-lumpur, ho-chi-minh-city.")
+                return 
+
+            list_events = events.discover(target_city)
 
             env.add_system_log("Number of events:" + str(len(list_events.keys())))
             n_events = 0
@@ -44,7 +60,6 @@ def agent(env: Environment, state: State):
             # Save the extracted data
             state.event_details = event_details
             
-            user_input = get_user_messages(env.list_messages())[-1]
             prompt = {"role": "system", "content": prompt_choose_events([user_input], event_details)}
             result = env.completion([prompt])
             
