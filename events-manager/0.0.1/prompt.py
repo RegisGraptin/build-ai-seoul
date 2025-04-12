@@ -21,7 +21,7 @@ def prompt_choose_events(user_preferences: List[str], events) -> str:
     return (
         "You are responsible for selecting and managing a list of events based on the user's preferences and availability. "
         "Below is the list of available events. Your task is to identify and propose the most relevant and engaging options. "
-        "The user will have the opportunity to provide feedback afterwards. You have to list them in a specific format: "
+        "The user will have the opportunity to provide feedback afterwards. You have to list them and order by time in a specific format: "
         "#id - date - event name - relevant information / description.\n\n"
         f"User Preferences: {user_details}\n\n"
         f"Available Events:\n{details}"
