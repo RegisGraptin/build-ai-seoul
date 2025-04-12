@@ -1,0 +1,17 @@
+{
+  "category": "agent",
+  "description": "Manage events based on user profile, preferences and availability",
+  "tags": [],
+  "details": {
+    "agent": {
+      "framework": "standard",
+      "welcome": {
+        "description": "Make NEAR blockchain transactions",
+        "title": "NEAR agent"
+      }
+    }
+  },
+  "show_entry": true,
+  "name": "events-manager",
+  "version": "0.0.14"
+}

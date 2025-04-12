@@ -1,0 +1,33 @@
+{
+    "event_name": "",
+    "description": "",
+    "langue": [],
+    "host": {
+      "name": "",
+      "representatives": [],
+      "contact_info": ""
+    },
+    "location": {
+      "city": "",
+      "address": ""
+    },
+    "dates": {
+      "start": "",
+      "end": "",
+      "schedule": [
+        {
+            "time": "",
+            "topic": ""
+        }
+      ]
+    },
+    "status": "",
+    "themes": [],
+    "target_audience": [],
+    "social_links": {},
+    "sponsors": [],
+    "platform": "Luma",
+    "event_type": "In-person",
+    "category": "Crypto"
+  }
+  
