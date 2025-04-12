@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 
 event_template_json = json.load(open("./template/event.json"))
@@ -13,11 +14,15 @@ Here is the data:
 {data}
 """
 
-def prompt_choose_events(events) -> str:
+def prompt_choose_events(user_preferences: List[str], events) -> str:
+    details = "\n".join(events.values())
+    user_details = "\n".join(user_preferences)
 
-    details = [event_detail for event_detail in events.values()]
-
-    return "Here a list of event, based on the user preferences and availability, you will be in charge to propose and manage" \
-    "a list of events. Here are the events, you need to pick the most relevant and interesting. The user will have the possibility later on" \
-    "to give you some feedbacks:" \
-    "".join(details)
+    return (
+        "You are responsible for selecting and managing a list of events based on the user's preferences and availability. "
+        "Below is the list of available events. Your task is to identify and propose the most relevant and engaging options. "
+        "The user will have the opportunity to provide feedback afterwards. You have to list them in a specific format: "
+        "#id - date - event name - relevant information / description.\n\n"
+        f"User Preferences: {user_details}\n\n"
+        f"Available Events:\n{details}"
+    )

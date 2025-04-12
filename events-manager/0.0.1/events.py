@@ -23,7 +23,7 @@ class Events:
 
         soup = BeautifulSoup(response.content, "html.parser")
         text_only = soup.get_text(separator=' ', strip=True)
-        
+
         return text_only
 
     def discover(self):
@@ -41,4 +41,11 @@ if __name__ == "__main__":
     events = Events()
 
     print(events.discover())
+    # response = requests.get("https://lu.ma/seoul")
+    # response.raise_for_status()
+    
+    # soup = BeautifulSoup(response.content, 'html.parser')
+    # d = soup.find("div", class_=".weekday")
+    # print(d)
+    
 

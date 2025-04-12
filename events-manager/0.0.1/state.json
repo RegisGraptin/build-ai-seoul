@@ -1,3 +1,3 @@
 {
-  "action": "EVENT_SEARCH_INFO"
+  "action": "FETCH_INFO"
 }

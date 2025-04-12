@@ -1,9 +1,4 @@
-import asyncio
-import enum
-
 from nearai.agents.environment import Environment
-from py_near.account import Account
-from py_near.dapps.core import NEAR
 
 from actions import Actions
 from events import Events
@@ -17,25 +12,24 @@ events = Events()
 # 1. Get user information and events info
 # 2. Adjust the selection based on the user preferences
 
+def get_user_messages(chat_history):
+    return [msg['content'] for msg in chat_history if msg.get('role') == 'user']
+
 def agent(env: Environment, state: State):
     
     env.add_system_log("type of action " + state.action)
-    state.action = Actions.EVENT_SEARCH_INFO
-    
 
-    if not state.action:
-        state.action = Actions.EVENT_SEARCH_INFO
+    print("state.action", state.action)
 
-    match state.action:
-        # case Actions.
-        case Actions.FETCH_USER_INFO:
-            pass
+    # Get user input
 
-        case Actions.EVENT_SEARCH_INFO:
-            
+    match Actions[state.action]:
+        case Actions.FETCH_INFO:
             env.add_system_log("Discover new events")
 
             list_events = events.discover()
+
+            env.add_system_log("Number of events:" + str(len(list_events.keys())))
             n_events = 0
             event_details = {}
             for link, event_detail in list_events.items():
@@ -49,28 +43,29 @@ def agent(env: Environment, state: State):
 
             # Save the extracted data
             state.event_details = event_details
-
-            prompt = {"role": "system", "content": prompt_choose_events(event_details)}
+            
+            user_input = get_user_messages(env.list_messages())[-1]
+            prompt = {"role": "system", "content": prompt_choose_events([user_input], event_details)}
             result = env.completion([prompt])
             
             env.add_reply(result)
+
+            # Move to the other phase
+            state.action = Actions.FEEDBACK
         
-        case Actions.PROPOSE_EVENTS:
-            prompt = {"role": "system", "content": prompt_choose_events(state.event_details)}
+        case Actions.FEEDBACK:
+            user_inputs = get_user_messages(env.list_messages())
+            prompt = {"role": "system", "content": prompt_choose_events(user_inputs, state.event_details)}
             result = env.completion([prompt])
-                
             env.add_reply(result)
 
 
 
     # data = utils.parse_response(reply)
-    state.action = Actions.PROPOSE_EVENTS
     utils.save_state(state)
     
-
-
-
-
+env.add_system_log("Load state")
 state = State(**utils.get_state())
 
+env.add_system_log("Call agent")
 agent(env, state)

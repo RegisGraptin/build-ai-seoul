@@ -9,7 +9,6 @@ from enum import StrEnum, auto
 
 class Actions(StrEnum):
 
-    FETCH_USER_INFO = auto()
-    EVENT_SEARCH_INFO = auto()
-    PROPOSE_EVENTS    = auto()
+    FETCH_INFO = auto()
+    FEEDBACK   = auto()
 
